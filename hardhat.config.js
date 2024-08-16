@@ -1,4 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
+require("hardhat-gas-reporter")
 require('dotenv').config();
 // require('./scripts/hardhat.tasks.js');
 
@@ -28,19 +29,25 @@ module.exports = {
         sources: "./contracts",
         cache: "./build/cache",
         artifacts: "./build/artifacts",
-        tests: "./hhtest",
+        tests: "./test",
     },
     solidity: {
         compilers: [
             {
                 version: "0.8.10",
                 settings: {
-                    // optimizer: {
-                    //     enabled: true,
-                    //     runs: 1000000,
-                    // }
+                    optimizer: {
+                        enabled: true,
+                        runs: 200,
+                    },
+                    viaIR: true
                 }
             },
-        ]
+        ],
+        gasReporter: {
+            enabled: process.env.REPORT_GAS === 'true', // Use environment variable to enable/disable gas reporting
+            currency: 'USD',
+            gasPrice: 21,
+        },
     }
 };

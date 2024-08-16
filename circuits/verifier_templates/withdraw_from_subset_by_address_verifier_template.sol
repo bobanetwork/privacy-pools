@@ -7,8 +7,25 @@ contract WithdrawFromSubsetByAddressVerifier {
     using ProofLib for ProofLib.G1Point;
     using ProofLib for ProofLib.G2Point;
 
+    // Verification Key data
+
     function withdrawFromSubsetByAddressVerifyingKey() internal pure returns (ProofLib.VerifyingKey memory vk) {
-// VERIFYING_KEY
+        ProofLib.G1Point[] memory IC;
+        IC[0] = ProofLib.G1Point(IC0x, IC0y);
+        IC[1] = ProofLib.G1Point(IC1x, IC1y);
+        IC[2] = ProofLib.G1Point(IC2x, IC2y);
+        IC[3] = ProofLib.G1Point(IC3x, IC3y);
+        IC[4] = ProofLib.G1Point(IC4x, IC4y);
+        IC[5] = ProofLib.G1Point(IC5x, IC5y);
+        IC[6] = ProofLib.G1Point(IC6x, IC6y);
+
+        vk = ProofLib.VerifyingKey(
+            ProofLib.G1Point(alphax, alphay),
+            ProofLib.G2Point([betax1, betax2], [betay1, betay2]),
+            ProofLib.G2Point([gammax1, gammax2], [gammay1, gammay2]),
+            ProofLib.G2Point([deltax1, deltax2], [deltay1, deltay2]),
+            IC
+        );
     }
 
     function _verifyWithdrawFromSubsetByAddressProof(
@@ -21,10 +38,10 @@ contract WithdrawFromSubsetByAddressVerifier {
         uint withdrawMetadata
     ) internal view returns (bool) {
         if (root >= ProofLib.snark_scalar_field
-            || addressRoot >= ProofLib.snark_scalar_field
-            || subsetRoot >= ProofLib.snark_scalar_field
-            || nullifier >= ProofLib.snark_scalar_field
-            || assetMetadata >= ProofLib.snark_scalar_field
+        || addressRoot >= ProofLib.snark_scalar_field
+        || subsetRoot >= ProofLib.snark_scalar_field
+        || nullifier >= ProofLib.snark_scalar_field
+        || assetMetadata >= ProofLib.snark_scalar_field
             || withdrawMetadata >= ProofLib.snark_scalar_field
         ) revert ProofLib.GteSnarkScalarField();
 
